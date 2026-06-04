@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>企业财税合规风险检测</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 16px;
+}
+.container {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  margin: 20px 0;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 28px 24px 24px;
+  text-align: center;
+  color: #fff;
+}
+.header .icon { font-size: 40px; margin-bottom: 10px; }
+.header h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.header .sub { font-size: 13px; opacity: 0.85; }
+.header .badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.2);
+  border-radius: 12px;
+  padding: 4px 14px;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+/* Progress bar */
+.progress-wrap {
+  height: 5px;
+  background: #e8ecf1;
+  position: relative;
+}
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  transition: width 0.4s ease;
+  border-radius: 0 3px 3px 0;
+}
+
+/* Step sections */
+.step { padding: 24px 24px 32px; }
+.step.hidden { display: none; }
+
+/* Step 1: Identity */
+.step-label {
+  font-size: 12px;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+.form-group { margin-bottom: 18px; }
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 6px;
+}
+.form-group label .required { color: #e74c3c; margin-left: 2px; }
+.form-group input {
+  width: 100%;
+  height: 48px;
+  border: 2px solid #e8ecf1;
+  border-radius: 12px;
+  padding: 0 16px;
+  font-size: 15px;
+  color: #333;
+  background: #f8f9fb;
+  transition: border 0.2s;
+  outline: none;
+}
+.form-group input:focus { border-color: #667eea; background: #fff; }
+.form-group input.error { border-color: #e74c3c; background: #fff5f5; }
+.form-group .hint { font-size: 12px; color: #999; margin-top: 4px; }
+
+.agree-tip {
+  font-size: 12px;
+  color: #999;
+  text-align: center;
+  margin-top: 8px;
+  line-height: 1.6;
+}
+.agree-tip a { color: #667eea; text-decoration: none; }
+
+/* Step 2: Questions */
+.question-card {
+  background: #f8f9fb;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 14px;
+}
+.question-num {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 26px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-right: 8px;
+}
+.question-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.6;
+}
+
+.options { margin-top: 14px; }
+.option {
+  display: block;
+  width: 100%;
+  padding: 13px 16px;
+  background: #fff;
+  border: 2px solid #e8ecf1;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #555;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+  outline: none;
+}
+.option:active { transform: scale(0.98); }
+.option.selected {
+  border-color: #667eea;
+  background: #f3f0ff;
+  color: #333;
+  font-weight: 500;
+}
+.option .radio {
+  display: inline-block;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  margin-right: 10px;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+  transition: all 0.2s;
+}
+.option.selected .radio {
+  border-color: #667eea;
+  background: #667eea;
+  box-shadow: inset 0 0 0 3px #fff;
+}
+
+/* Buttons */
+.btn {
+  display: block;
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  outline: none;
+}
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(102,126,234,0.4);
+}
+.btn-primary:active { transform: scale(0.97); opacity: 0.9; }
+.btn-primary:disabled {
+  background: #ccc;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.btn-outline {
+  background: #fff;
+  color: #667eea;
+  border: 2px solid #667eea;
+}
+.btn-submit {
+  margin-top: 10px;
+}
+
+/* Step 3: Results */
+.result-header {
+  text-align: center;
+  padding: 10px 0 20px;
+}
+.score-ring {
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  margin: 0 auto 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #fff;
+  font-weight: 700;
+}
+.score-ring.low { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+.score-ring.medium { background: linear-gradient(135deg, #f5af19, #f12711); }
+.score-ring.high { background: linear-gradient(135deg, #f12711, #f5af19); }
+.score-ring.critical { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+.score-ring .score { font-size: 36px; line-height: 1; }
+.score-ring .total { font-size: 13px; opacity: 0.8; }
+.result-level {
+  font-size: 18px; font-weight: 700;
+  margin-bottom: 4px;
+}
+.result-level.low { color: #27ae60; }
+.result-level.medium { color: #e67e22; }
+.result-level.high { color: #e74c3c; }
+.result-level.critical { color: #c0392b; }
+.result-desc { font-size: 13px; color: #999; }
+
+/* Blurred detail */
+.detail-section {
+  position: relative;
+  background: #f8f9fb;
+  border-radius: 14px;
+  padding: 20px;
+  margin-top: 16px;
+}
+.detail-section .title {
+  font-size: 15px; font-weight: 700;
+  color: #333;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+}
+.detail-section .title .lock { font-size: 18px; margin-right: 6px; }
+.detail-blur {
+  filter: blur(8px);
+  user-select: none;
+  pointer-events: none;
+}
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+.detail-item .dim { color: #333; }
+.detail-item .tag {
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+.tag-safe { background: #e8f8f5; color: #27ae60; }
+.tag-warn { background: #fef3e2; color: #e67e22; }
+.tag-danger { background: #fdecea; color: #e74c3c; }
+
+.blur-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.5);
+  border-radius: 14px;
+}
+.blur-overlay .lock-icon { font-size: 40px; margin-bottom: 10px; }
+.blur-overlay .text {
+  font-size: 15px; font-weight: 700;
+  color: #333;
+  margin-bottom: 4px;
+}
+.blur-overlay .sub-text {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 16px;
+}
+
+/* Contact section */
+.contact-section {
+  background: linear-gradient(135deg, #f3f0ff, #fef6ff);
+  border-radius: 14px;
+  padding: 20px;
+  margin-top: 16px;
+  text-align: center;
+}
+.contact-section .cta-title {
+  font-size: 16px; font-weight: 700;
+  color: #333;
+  margin-bottom: 6px;
+}
+.contact-section .cta-sub {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 16px;
+}
+.contact-section .wechat-label {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 6px;
+}
+.contact-section .wechat-id {
+  font-size: 18px; font-weight: 700;
+  color: #667eea;
+  background: #fff;
+  display: inline-block;
+  padding: 8px 20px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  border: 2px dashed #667eea;
+}
+.copy-btn {
+  display: inline-block;
+  background: #667eea;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.copy-btn:active { transform: scale(0.95); }
+.copy-success { color: #27ae60; font-size: 12px; margin-top: 6px; }
+
+.footer { text-align: center; padding: 20px 24px; font-size: 12px; color: #ccc; }
+
+/* Toast */
+.toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.8);
+  color: #fff;
+  padding: 10px 24px;
+  border-radius: 20px;
+  font-size: 14px;
+  z-index: 999;
+  animation: fadeInOut 2.5s forwards;
+}
+@keyframes fadeInOut {
+  0% { opacity:0; transform: translateX(-50%) translateY(-10px); }
+  15% { opacity:1; transform: translateX(-50%) translateY(0); }
+  85% { opacity:1; }
+  100% { opacity:0; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="icon">🔍</div>
+    <h1>企业财税合规风险检测</h1>
+    <div class="sub">小微企业专属 · 2分钟自测</div>
+    <div class="badge">📋 共8题 · 覆盖工商税务核心风险</div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progressBar" style="width:0%"></div>
+  </div>
+
+  <!-- ===== STEP 1: Identity ===== -->
+  <div class="step" id="step1">
+    <div class="step-label">STEP 1 · 填写信息</div>
+    <div class="form-group">
+      <label>公司名称<span class="required">*</span></label>
+      <input type="text" id="companyName" placeholder="请输入您的公司全称" autocomplete="off">
+      <div class="hint">用于生成您专属的风险评估档案</div>
+    </div>
+    <div class="form-group">
+      <label>手机号码<span class="required">*</span></label>
+      <input type="tel" id="phone" placeholder="用于接收完整风险评估报告" autocomplete="off" maxlength="11">
+    </div>
+    <div class="agree-tip">
+      点击"开始测评"即表示同意我们将根据您的答题生成<br>专属风险评估报告，您的信息仅用于本次服务
+    </div>
+    <button class="btn btn-primary" id="startBtn" style="margin-top:16px">开始测评 →</button>
+  </div>
+
+  <!-- ===== STEP 2: Questions ===== -->
+  <div class="step hidden" id="step2">
+    <div class="step-label" id="step2Label">STEP 2 · 第 1/8 题</div>
+    <div id="questionsContainer"></div>
+    <div style="display:flex; gap:12px; margin-top:10px" id="navButtons">
+      <button class="btn btn-outline hidden" id="prevBtn" style="flex:1">← 上一题</button>
+      <button class="btn btn-primary hidden" id="nextBtn" style="flex:1">下一题 →</button>
+    </div>
+    <button class="btn btn-primary btn-submit hidden" id="submitBtn">查看检测结果 🔍</button>
+  </div>
+
+  <!-- ===== STEP 3: Results ===== -->
+  <div class="step hidden" id="step3">
+    <div id="resultContent"></div>
+    <div class="footer">本检测结果仅供参考，不构成正式法律意见</div>
+  </div>
+</div>
+
+<script>
+// ============ CONFIG ============
+const SENDKEY = 'SCT358443TDiM2V4xsf1TdZJIliKMj8117';
+// 获取URL参数中的来源标记（发链接时加 ?from=张三 即可追踪是谁）
+const urlParams = new URLSearchParams(window.location.search);
+const VISITOR_FROM = urlParams.get('from') || '';
+// 生成访客唯一ID（用于识别重复访问）
+function getVisitorId() {
+  let id = localStorage.getItem('_taxchk_vid');
+  if (!id) {
+    id = 'V' + Date.now().toString(36) + Math.random().toString(36).substr(2, 4);
+    localStorage.setItem('_taxchk_vid', id);
+  }
+  return id;
+}
+const VISITOR_ID = getVisitorId();
+
+// ============ QUESTIONS ============
+const questions = [
+  {
+    id: 1,
+    title: '您的企业是否存在长期零申报，但实际有经营收入的情况？',
+    options: [
+      { text: 'A. 不存在，申报与经营情况一致', score: 0 },
+      { text: 'B. 偶尔零申报，但都有合理原因', score: 1 },
+      { text: 'C. 长期零申报，但有小额收入未开票', score: 2 },
+      { text: 'D. 持续零申报，实际有较大经营流水', score: 3 }
+    ]
+  },
+  {
+    id: 2,
+    title: '企业是否存在无真实交易背景的发票入账（如买票、找票冲账）？',
+    options: [
+      { text: 'A. 完全不存在，所有发票均有真实业务', score: 0 },
+      { text: 'B. 偶尔有少量费用票代替真实票据', score: 1 },
+      { text: 'C. 部分成本费用通过第三方获取发票', score: 2 },
+      { text: 'D. 经常通过购买发票来增加成本/抵扣', score: 3 }
+    ]
+  },
+  {
+    id: 3,
+    title: '企业老板/股东的个人账户是否与公司账户存在资金混用？',
+    options: [
+      { text: 'A. 公私账户完全独立，无混用', score: 0 },
+      { text: 'B. 偶尔小额混用，但均有记账', score: 1 },
+      { text: 'C. 经常公私转账，未做规范区分', score: 2 },
+      { text: 'D. 大部分经营收支走个人账户', score: 3 }
+    ]
+  },
+  {
+    id: 4,
+    title: '企业是否每年按时完成工商年报公示？',
+    options: [
+      { text: 'A. 每年按时完成，从未逾期', score: 0 },
+      { text: 'B. 偶尔晚几天，但从未被列入异常', score: 1 },
+      { text: 'C. 有过逾期被列入经营异常名录', score: 2 },
+      { text: 'D. 从未做过工商年报或不了解此事', score: 3 }
+    ]
+  },
+  {
+    id: 5,
+    title: '企业是否存在逾期未申报纳税的情况？',
+    options: [
+      { text: 'A. 从未逾期，申报记录良好', score: 0 },
+      { text: 'B. 偶尔逾期1-2次，已补报并缴纳滞纳金', score: 1 },
+      { text: 'C. 多次逾期，有未处理的申报异常', score: 2 },
+      { text: 'D. 长期存在未申报税种或已被列入非正常户', score: 3 }
+    ]
+  },
+  {
+    id: 6,
+    title: '企业的合同流、发票流、资金流是否做到"三流一致"？',
+    options: [
+      { text: 'A. 三流完全一致，有完整证据链', score: 0 },
+      { text: 'B. 基本一致，偶尔有小额差异', score: 1 },
+      { text: 'C. 经常出现合同方≠开票方≠收款方', score: 2 },
+      { text: 'D. 不了解"三流一致"的要求', score: 3 }
+    ]
+  },
+  {
+    id: 7,
+    title: '股东或关联方是否有向公司借款、且年末未归还的情况？',
+    options: [
+      { text: 'A. 不存在股东借款或年末均已归还', score: 0 },
+      { text: 'B. 有小额借款，计划在下年度归还', score: 1 },
+      { text: 'C. 存在较大金额借款且超过一年未还', score: 2 },
+      { text: 'D. 公司资金长期被股东个人占用', score: 3 }
+    ]
+  },
+  {
+    id: 8,
+    title: '企业进行利润分配/分红时，是否按规定代扣代缴了个人所得税？',
+    options: [
+      { text: 'A. 每次都依法代扣代缴，记录完整', score: 0 },
+      { text: 'B. 代扣了但偶尔未及时申报缴纳', score: 1 },
+      { text: 'C. 有分红但未代扣个税，直接转给股东', score: 2 },
+      { text: 'D. 不清楚分红需要代扣个税或从未处理', score: 3 }
+    ]
+  }
+];
+
+// ============ STATE ============
+let answers = {};
+let currentQ = 0;
+let companyName = '';
+let phone = '';
+
+// ============ INIT ============
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('startBtn').addEventListener('click', startCheck);
+  document.getElementById('prevBtn').addEventListener('click', prevQuestion);
+  document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+  document.getElementById('submitBtn').addEventListener('click', submitCheck);
+
+  // 输入校验
+  ['companyName', 'phone'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => {
+      document.getElementById(id).classList.remove('error');
+    });
+  });
+
+  // 页面打开通知
+  pingOpen();
+});
+
+// ============ DEVICE INFO ============
+function getDeviceInfo() {
+  var ua = navigator.userAgent;
+  var device = 'Unknown';
+  if (/MicroMessenger/i.test(ua)) device = '微信内置浏览器';
+  else if (/QQ\//i.test(ua)) device = 'QQ内置浏览器';
+  else if (/iPhone/i.test(ua)) device = 'iPhone (Safari)';
+  else if (/iPad/i.test(ua)) device = 'iPad';
+  else if (/Android/i.test(ua)) device = 'Android手机';
+  else if (/Windows/i.test(ua)) device = 'Windows电脑';
+  else if (/Mac/i.test(ua)) device = 'Mac电脑';
+  else device = '其他设备';
+  var screen = window.screen.width + 'x' + window.screen.height;
+  return device + ' | 屏幕' + screen;
+}
+
+// ============ PING ============
+function pingOpen() {
+  var who = VISITOR_FROM ? '[' + VISITOR_FROM + '] ' : '';
+  var title = encodeURIComponent(who + '有人打开了财税测评');
+  var desp = encodeURIComponent(
+    '时间：' + new Date().toLocaleString('zh-CN') + '%0A' +
+    '设备：' + getDeviceInfo() + '%0A' +
+    '访客ID：' + VISITOR_ID + '%0A' +
+    '来源：' + (VISITOR_FROM || '直接访问') + '%0A' +
+    (VISITOR_FROM ? '' : '（发送链接时加 ?from=姓名 可追踪来源）')
+  );
+  var img = new Image();
+  img.src = 'https://sctapi.ftqq.com/' + SENDKEY + '.send?title=' + title + '&desp=' + desp;
+}
+
+function notifyComplete(name, tel, score, level, details) {
+  var highRiskItems = details.filter(function(d) { return d.score >= 2; });
+  var riskLines = highRiskItems.length > 0
+    ? highRiskItems.map(function(d) { return '  · ' + d.title + '（' + d.label + '）'; }).join('%0A')
+    : '  无';
+  var who = VISITOR_FROM ? '[' + VISITOR_FROM + '] ' : '';
+  var title = encodeURIComponent(who + name + ' 完成财税测评');
+  var desp = encodeURIComponent(
+    '企业：' + name + '%0A' +
+    '电话：' + tel + '%0A' +
+    '评分：' + score + '/24（' + level + '）%0A' +
+    '设备：' + getDeviceInfo() + '%0A' +
+    '时间：' + new Date().toLocaleString('zh-CN') + '%0A' +
+    '来源：' + (VISITOR_FROM || '直接访问') + '%0A%0A' +
+    '重点关注维度：%0A' + riskLines + '%0A%0A' +
+    '建议尽快联系回访'
+  );
+  var img = new Image();
+  img.src = 'https://sctapi.ftqq.com/' + SENDKEY + '.send?title=' + title + '&desp=' + desp;
+}
+
+// ============ STEP 1: Identity ============
+function startCheck() {
+  const nameEl = document.getElementById('companyName');
+  const phoneEl = document.getElementById('phone');
+  companyName = nameEl.value.trim();
+  phone = phoneEl.value.trim();
+
+  let valid = true;
+  if (!companyName) {
+    nameEl.classList.add('error');
+    valid = false;
+  }
+  if (!phone || !/^1\d{10}$/.test(phone)) {
+    phoneEl.classList.add('error');
+    valid = false;
+  }
+  if (!valid) return;
+
+  document.getElementById('step1').classList.add('hidden');
+  document.getElementById('step2').classList.remove('hidden');
+  document.getElementById('progressBar').style.width = '15%';
+  renderQuestions();
+  updateNav();
+}
+
+// ============ STEP 2: Questions ============
+function renderQuestions() {
+  const container = document.getElementById('questionsContainer');
+  for (let i = 0; i < questions.length; i++) {
+    const q = questions[i];
+    const card = document.createElement('div');
+    card.className = 'question-card' + (i !== currentQ ? ' hidden' : '');
+    card.id = 'qCard' + i;
+    card.innerHTML = `
+      <div><span class="question-num">${q.id}</span><span class="question-text">${q.title}</span></div>
+      <div class="options">
+        ${q.options.map((o, j) => `
+          <button class="option${answers[q.id] === j ? ' selected' : ''}"
+                  onclick="selectAnswer(${q.id}, ${j})">
+            <span class="radio"></span>${o.text}
+          </button>
+        `).join('')}
+      </div>
+    `;
+    container.appendChild(card);
+  }
+  updateStepLabel();
+}
+
+function selectAnswer(qid, optIdx) {
+  answers[qid] = optIdx;
+  document.querySelectorAll('#qCard' + (questions.findIndex(q => q.id === qid)) + ' .option').forEach((el, i) => {
+    el.classList.toggle('selected', i === optIdx);
+  });
+  updateNav();
+}
+
+function updateNav() {
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const submitBtn = document.getElementById('submitBtn');
+
+  prevBtn.classList.toggle('hidden', currentQ === 0);
+  nextBtn.classList.toggle('hidden', currentQ === questions.length - 1);
+  submitBtn.classList.toggle('hidden', currentQ !== questions.length - 1);
+
+  const answered = Object.keys(answers).length;
+  const total = questions.length;
+  document.getElementById('progressBar').style.width = (15 + (answered / total) * 70) + '%';
+
+  if (currentQ === questions.length - 1) {
+    submitBtn.disabled = answers[questions[currentQ].id] === undefined;
+  }
+}
+
+function switchQuestion(newIdx) {
+  document.getElementById('qCard' + currentQ).classList.add('hidden');
+  currentQ = newIdx;
+  document.getElementById('qCard' + currentQ).classList.remove('hidden');
+  updateNav();
+  updateStepLabel();
+}
+
+function updateStepLabel() {
+  document.getElementById('step2Label').textContent = 'STEP 2 · 第 ' + (currentQ + 1) + '/8 题';
+}
+
+function nextQuestion() {
+  if (answers[questions[currentQ].id] === undefined) {
+    showToast('请先选择一个选项');
+    return;
+  }
+  if (currentQ < questions.length - 1) {
+    switchQuestion(currentQ + 1);
+  }
+}
+
+function prevQuestion() {
+  if (currentQ > 0) {
+    switchQuestion(currentQ - 1);
+  }
+}
+
+// ============ STEP 3: Results ============
+function submitCheck() {
+  if (answers[questions[currentQ].id] === undefined) {
+    showToast('请先回答当前题目');
+    return;
+  }
+
+  // Calculate score
+  let totalScore = 0;
+  let details = [];
+  questions.forEach(q => {
+    const optIdx = answers[q.id];
+    const opt = q.options[optIdx];
+    totalScore += opt.score;
+    let label = '低风险', tagClass = 'tag-safe';
+    if (opt.score === 2) { label = '中等风险'; tagClass = 'tag-warn'; }
+    if (opt.score === 3) { label = '高风险'; tagClass = 'tag-danger'; }
+    details.push({ title: q.title, score: opt.score, label: label, tagClass: tagClass });
+  });
+
+  // Determine level
+  let level, levelClass, ringClass, desc;
+  if (totalScore <= 6) {
+    level = '低风险'; levelClass = 'low'; ringClass = 'low';
+    desc = '企业财税合规状况总体良好，继续保持';
+  } else if (totalScore <= 14) {
+    level = '中等风险'; levelClass = 'medium'; ringClass = 'medium';
+    desc = '存在若干风险点需要关注和整改';
+  } else if (totalScore <= 19) {
+    level = '高风险'; levelClass = 'high'; ringClass = 'high';
+    desc = '多项财税风险突出，建议尽快合规处理';
+  } else {
+    level = '严重风险'; levelClass = 'critical'; ringClass = 'critical';
+    desc = '企业财税合规状况堪忧，须立即采取措施';
+  }
+
+  // Show results
+  document.getElementById('step2').classList.add('hidden');
+  document.getElementById('step3').classList.remove('hidden');
+  document.getElementById('progressBar').style.width = '100%';
+
+  // Build detail items (blurred)
+  let detailItemsHTML = details.map(d => `
+    <div class="detail-item">
+      <span class="dim">${d.title.substring(0,15)}...</span>
+      <span class="tag ${d.tagClass}">${d.label}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('resultContent').innerHTML = `
+    <div class="result-header">
+      <div class="score-ring ${ringClass}">
+        <span class="score">${totalScore}</span>
+        <span class="total">/ 24分</span>
+      </div>
+      <div class="result-level ${levelClass}">${level}</div>
+      <div class="result-desc">${desc}</div>
+    </div>
+
+    <div class="detail-section">
+      <div class="title">📋 各维度风险详情</div>
+      <div class="detail-blur">
+        ${detailItemsHTML}
+      </div>
+      <div class="blur-overlay">
+        <div class="lock-icon">🔒</div>
+        <div class="text">查看完整风险分析报告</div>
+        <div class="sub-text">包含逐项诊断 + 整改建议 + 风险等级判定</div>
+        <button class="btn btn-primary" style="width:auto; padding:0 32px" onclick="document.getElementById('contactPart').scrollIntoView({behavior:'smooth'})">
+          获取完整报告 →
+        </button>
+      </div>
+    </div>
+
+    <div class="contact-section" id="contactPart">
+      <div class="cta-title">📞 获取完整风险评估报告</div>
+      <div class="cta-sub">您的专属财税顾问将为您提供<br>逐项风险诊断 + 个性化合规整改方案</div>
+      <div class="wechat-label">添加顾问微信</div>
+      <div class="wechat-id" id="wechatId">zsqq402854813</div>
+      <div style="margin-top:10px">
+        <button class="copy-btn" onclick="copyWechat()">📋 一键复制微信号</button>
+      </div>
+      <div class="copy-success" id="copySuccess"></div>
+      <div style="margin-top:16px; font-size:13px; color:#888;">
+        或直接致电：<strong style="color:#667eea">18749608847</strong>
+      </div>
+    </div>
+  `;
+
+  // Notify
+  notifyComplete(companyName, phone, totalScore, level, details);
+}
+
+function copyWechat() {
+  const wechatId = document.getElementById('wechatId').textContent;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(wechatId).then(() => {
+      document.getElementById('copySuccess').textContent = '✅ 已复制，请打开微信添加好友';
+    });
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = wechatId;
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    document.getElementById('copySuccess').textContent = '✅ 已复制，请打开微信添加好友';
+  }
+}
+
+// ============ UTILS ============
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2600);
+}
+</script>
+</body>
+</html>
